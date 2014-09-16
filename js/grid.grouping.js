@@ -257,15 +257,15 @@ $.jgrid.extend({
 								break;// next item of the same lever are found
 							}
 							if (itemGroupingLevel === num + 1) {
-								$(r).show().find(">td>span."+"tree-wrap-"+$t.p.direction).removeClass(minus).addClass(plus);
+								$(r).filter(':not(.ui-keep-hidden)').show().find(">td>span."+"tree-wrap-"+$t.p.direction).removeClass(minus).addClass(plus);
 								if(frz) {
-									$(r2).show().find(">td>span."+"tree-wrap-"+$t.p.direction).removeClass(minus).addClass(plus);
+									$(r2).filter(':not(.ui-keep-hidden)').show().find(">td>span."+"tree-wrap-"+$t.p.direction).removeClass(minus).addClass(plus);
 								}
 							}
 						} else if (showData) {
-							$(r).show();
+							$(r).filter(':not(.ui-keep-hidden)').show();
 							if(frz) {
-								$(r2).show();
+								$(r2).filter(':not(.ui-keep-hidden)').show();
 							}
 						}
 						r = r.nextSibling;
@@ -413,6 +413,24 @@ $.jgrid.extend({
 								hhdr = " style=\"display:none;\"";
 							}
 							str += "<tr"+hhdr+" jqfootlevel=\""+(n.idx-ik)+"\" role=\"row\" class=\"ui-widget-content jqfoot ui-row-"+$t.p.direction+"\">";
+							str += buildSummaryTd(i, ik, grp.groups, 0);
+							str += "</tr>";
+						}
+						toEnd = jj;
+					} else if(grp.groupSummaryPos[n.idx] === 'header') {
+						var jj;
+						if (gg !== undefined) {
+							for (jj = 0; jj < grp.groupField.length; jj++) {
+								if (gg.dataIndex === grp.groupField[jj]) {
+									break;
+								}
+							}
+							toEnd = grp.groupField.length - jj;
+						}
+						for (ik = 0; ik < toEnd; ik++) {
+							if(!sumreverse[ik]) { continue; }
+							var hhdr = " style=\"display:none;\"";
+							str += "<tr"+hhdr+" jqfootlevel=\""+(n.idx-ik)+"\" role=\"row\" class=\"ui-widget-content jqfoot ui-keep-hidden ui-row-"+$t.p.direction+"\">";
 							str += buildSummaryTd(i, ik, grp.groups, 0);
 							str += "</tr>";
 						}
